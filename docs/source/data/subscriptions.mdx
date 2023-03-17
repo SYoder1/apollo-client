@@ -26,7 +26,15 @@ You _should_ use subscriptions for the following:
 
 ## Choosing a subscription library
 
-The GraphQL spec does not define a specific protocol for sending subscription requests. The first popular JavaScript library to implement subscriptions over WebSocket is called `subscriptions-transport-ws`. **This library is no longer actively maintained.** Its successor is a library called `graphql-ws`. The two libraries _do not use the same WebSocket subprotocol_, so you need to make sure that your server and clients all use the same library.
+The GraphQL spec does not define a specific protocol for sending subscription requests. In Apollo Client, subscriptions can be sent over HTTP via multipart transport with the default terminating link, `HTTPLink`, or via WebSocket.
+
+### Multipart Subscriptions Over HTTP
+
+In order to use Apollo Client with a back-end that supports multipart subscriptions over HTTP (for example, Apollo Router) no additional client configuration is required. Apollo Client will automatically send the required headers with the request if the terminating `HTTPLink` receives a subscription operation.
+
+### Websocket
+
+The first popular JavaScript library to implement subscriptions over WebSocket is called `subscriptions-transport-ws`. **This library is no longer actively maintained.** Its successor is a library called `graphql-ws`. The two libraries _do not use the same WebSocket subprotocol_, so you need to make sure that your server and clients all use the same library.
 
 Apollo Client supports both `graphql-ws` and `subscriptions-transport-ws`. We recommend you use the newer library `graphql-ws`, and this page shows how to use it. If you need to use `subscriptions-transport-ws` because your server still uses that protocol, the differences are described [at the bottom of this page](#the-older-subscriptions-transport-ws-library).
 
@@ -80,9 +88,15 @@ Whenever your GraphQL server _does_ push data to a subscribing client, that data
 
 ## Setting up the transport
 
-Because subscriptions usually maintain a persistent connection, they shouldn't use the default HTTP transport that Apollo Client uses for queries and mutations. Instead, Apollo Client subscriptions most commonly communicate over WebSocket, via the [`graphql-ws`](https://www.npmjs.com/package/graphql-ws) library.
+Additional configuration is required if the back-end service your application uses communicates over the WebSocket protocol; in this case, Apollo Client subscriptions most commonly use the [`graphql-ws`](https://www.npmjs.com/package/graphql-ws) library. If the back-end service supports multipart subscriptions via HTTP, however, _no additional configuration is required_.
 
-> As mentioned in [Choosing a subscription library](#choosing-a-subscription-library), some servers use an older library called `subscriptions-transport-ws`. For necessary changes to use that library, see [below](#the-older-subscriptions-transport-ws-library).
+> As mentioned in [Choosing a subscription library](#choosing-a-subscription-library), some servers that communicate via WebSocket use an older library called `subscriptions-transport-ws`. For necessary changes to use that library, see [below](#the-older-subscriptions-transport-ws-library).
+
+## Subscriptions via Multipart HTTP
+
+No additional libraries or configuration are required. Apollo Client add the required headers to your request when the terminating (and default) `HTTPLink` receives a subscription operation at the `uri` specified when initializing the link or Apollo Client instance.
+
+## Subscriptions via WebSocket
 
 ### 1. Install required libraries
 
