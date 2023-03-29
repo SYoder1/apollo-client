@@ -30,7 +30,7 @@ The GraphQL spec does not define a specific protocol for sending subscription re
 
 ### Multipart Subscriptions Over HTTP
 
-In order to use Apollo Client with a back-end that supports multipart subscriptions over HTTP (for example, Apollo Router) no additional client configuration is required. Apollo Client will automatically send the required headers with the request if the terminating `HTTPLink` receives a subscription operation.
+To use Apollo Client with a backend that supports multipart subscriptions over HTTP, no additional client configuration is required. Apollo Client automatically sends the required headers with the request if the terminating `HTTPLink` is passed a subscription operation.
 
 ### WebSocket
 
@@ -94,7 +94,7 @@ Additional configuration is required if the back-end service your application us
 
 ## Subscriptions via Multipart HTTP
 
-No additional libraries or configuration are required. Apollo Client add the required headers to your request when the terminating (and default) `HTTPLink` receives a subscription operation at the `uri` specified when initializing the link or Apollo Client instance.
+No additional libraries or configuration are required. Apollo Client adds the required headers to your request when the terminating (and default) `HTTPLink` receives a subscription operation at the `uri` specified when initializing the link or Apollo Client instance.
 
 ## Subscriptions via WebSocket
 
